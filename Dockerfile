@@ -2,6 +2,8 @@ FROM php:7.3-apache
 
 LABEL MAINTAINER="dhso <dhso@163.com>"
 
+RUN a2enmod rewrite
+
 ENV KODCOLUD_VERSION 1.09
 ENV KODCOLUD_URL http://static.kodcloud.com/update/download/kodbox.${KODCOLUD_VERSION}.zip
 
