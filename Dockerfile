@@ -9,9 +9,6 @@ ENV S6RELEASE v1.22.1.0
 ENV S6URL     https://github.com/just-containers/s6-overlay/releases/download/
 ENV S6_READ_ONLY_ROOT 1
 
-
-USER root
-
 RUN set -x \
   # Install dependencies
   && apk add --no-cache nginx ca-certificates wget unzip gnupg \
@@ -31,7 +28,9 @@ RUN set -x \
   && mkdir -p /tmp/kodcloud \
   && wget -q -O /tmp/kodcloud.zip ${KODCOLUD_URL} \
   && unzip -q /tmp/kodcloud.zip -d /tmp/kodcloud/ \
-  && cp -a /tmp/kodcloud/* /var/www/ \
+  && cp -a /tmp/kodcloud/* /var/www/
+
+RUN set -x \
   # Install s6 overlay for service management
   && wget -qO - https://keybase.io/justcontainers/key.asc | gpg2 --import - \
   && cd /tmp \
@@ -49,9 +48,12 @@ RUN set -x \
   && mkfifo \
   /etc/services.d/nginx/supervise/control \
   /etc/services.d/php-fpm7/supervise/control \
-  /etc/s6/services/s6-fdholderd/supervise/control \
-  # && adduser nobody www-data \
-  # && chown -R nobody.www-data /etc/services.d /etc/s6 /run /var/lib/nginx /var/www \
+  /etc/s6/services/s6-fdholderd/supervise/control
+
+RUN set -x \
+  && adduser nobody www-data \
+  && chown -R nobody.www-data /etc/services.d /etc/s6 /run /var/lib/nginx /var/www \
+  # && chmod -R 755 /var/www \
   # Clean up
   && rm -rf "${GNUPGHOME}" /tmp/* \
   && apk del gnupg
@@ -59,10 +61,10 @@ RUN set -x \
 COPY etc/ /etc/
 
 WORKDIR /var/www
-# USER nobody:www-data
+USER nobody:www-data
 
-VOLUME /var/www
+VOLUME /run /tmp /var/lib/nginx/tmp
 
-EXPOSE 80
+EXPOSE 8080
 
 ENTRYPOINT ["/init"]
