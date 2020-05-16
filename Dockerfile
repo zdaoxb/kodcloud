@@ -59,7 +59,7 @@ RUN set -x \
 COPY etc/ /etc/
 
 WORKDIR /var/www
-USER nobody:www-datas
+USER nobody:www-data
 
 VOLUME /var/www
 
