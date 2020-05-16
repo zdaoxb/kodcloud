@@ -50,8 +50,8 @@ RUN set -x \
   /etc/services.d/nginx/supervise/control \
   /etc/services.d/php-fpm7/supervise/control \
   /etc/s6/services/s6-fdholderd/supervise/control \
-  && adduser nobody www-data \
-  && chown -R nobody.www-data /etc/services.d /etc/s6 /run /var/lib/nginx /var/www \
+  # && adduser nobody www-data \
+  # && chown -R nobody.www-data /etc/services.d /etc/s6 /run /var/lib/nginx /var/www \
   # Clean up
   && rm -rf "${GNUPGHOME}" /tmp/* \
   && apk del gnupg
@@ -59,7 +59,7 @@ RUN set -x \
 COPY etc/ /etc/
 
 WORKDIR /var/www
-USER nobody:www-data
+# USER nobody:www-data
 
 VOLUME /var/www
 
