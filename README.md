@@ -6,8 +6,8 @@
 docker run -d \
 --name kodcloud \
 --restart=unless-stopped \
--p 10800:8080 \
--v <kodcloud dir>:/var/www \
+-p 10800:80 \
+-v <kodcloud dir>:/var/www/html \
 dhso/kodcloud:latest
 ```
 
