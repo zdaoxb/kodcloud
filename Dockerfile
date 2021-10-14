@@ -15,7 +15,6 @@ RUN set -x \
   && apt-get purge -y --auto-remove ca-certificates wget \
   && rm -rf /var/cache/apk/* \
   && rm -rf /tmp/*
-
 RUN set -x \
   && apt-get update && apt-get install -y \
         libfreetype6-dev \
@@ -24,22 +23,19 @@ RUN set -x \
         exiftool \
   && docker-php-ext-install -j$(nproc) iconv \
   && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+  && docker-php-ext-install -j$(nproc) gd \
   && docker-php-ext-install exif \
   && docker-php-ext-configure exif --enable-exif \
-  && docker-php-ext-install -j$(nproc) \
-        bcmath \
-        exif \
-        gd \
-        intl \
-        ldap \
-        opcache \
-        pcntl \
-        pdo_mysql \
-	mysqli \
-        zip \
-        gmp \
-    ; \
-    \
+  && docker-php-ext-install -j$(nproc) bcmath\
+  && docker-php-ext-install -j$(nproc) intl\
+  && docker-php-ext-install -j$(nproc) ldap\
+  && docker-php-ext-install -j$(nproc) opcache\
+  && docker-php-ext-install -j$(nproc) pcntl\
+  && docker-php-ext-install -j$(nproc) pdo_mysql\
+  && docker-php-ext-install -j$(nproc) mysqli\
+  && docker-php-ext-install -j$(nproc) zip\
+  && docker-php-ext-install -j$(nproc) gmp\      
+      
 # pecl will claim success even if one install fails, so we need to perform each install separately
     pecl install memcached; \
     pecl install redis; \
