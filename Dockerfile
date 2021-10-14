@@ -22,13 +22,28 @@ RUN set -x \
         libjpeg62-turbo-dev \
         libpng-dev \
         exiftool \
+        ImageMagick \
+        dcraw \
+        ghostscript \
+        ffmpeg \
+        libjpeg \
+        libjpeg-devel \
+        libpng\
+        libpng-devel \
+        libtiff \
+        libtiff-devel \
+        libungif  \
+        libungif-devel \
+        freetype \
+        zlib\
+
   && docker-php-ext-install -j$(nproc) iconv \
   && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
   && docker-php-ext-install -j$(nproc) gd \
   && docker-php-ext-install exif \
   && docker-php-ext-configure exif --enable-exif \
   && rm -rf /var/cache/apk/*
-
+              
 WORKDIR /var/www/html
 
 COPY docker-apache2.conf /etc/apache2/conf-enabled/
