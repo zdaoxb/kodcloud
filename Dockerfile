@@ -1,4 +1,4 @@
-FROM php:7.3-apache
+	FROM php:7.3-apache
 
 LABEL MAINTAINER="dhso <dhso@163.com>"
 
@@ -15,6 +15,7 @@ RUN set -x \
   && apt-get purge -y --auto-remove ca-certificates wget \
   && rm -rf /var/cache/apk/* \
   && rm -rf /tmp/*
+
 RUN set -x \
   && apt-get update && apt-get install -y \
         libfreetype6-dev \
@@ -26,31 +27,8 @@ RUN set -x \
   && docker-php-ext-install -j$(nproc) gd \
   && docker-php-ext-install exif \
   && docker-php-ext-configure exif --enable-exif \
-  && docker-php-ext-install -j$(nproc) bcmath\
-  && docker-php-ext-install -j$(nproc) intl\
-  && docker-php-ext-install -j$(nproc) ldap\
-  && docker-php-ext-install -j$(nproc) opcache\
-  && docker-php-ext-install -j$(nproc) pcntl\
-  && docker-php-ext-install -j$(nproc) pdo_mysql\
-  && docker-php-ext-install -j$(nproc) mysqli\
-  && docker-php-ext-install -j$(nproc) zip\
-  && docker-php-ext-install -j$(nproc) gmp\      
-      
-# pecl will claim success even if one install fails, so we need to perform each install separately
-    pecl install memcached; \
-    pecl install redis; \
-    pecl install mcrypt; \
-    \
-    docker-php-ext-enable \
-        memcached \
-        redis \
-        mcrypt \
-    ; \
-    \
-
-
   && rm -rf /var/cache/apk/*
-              
+
 WORKDIR /var/www/html
 
 COPY docker-apache2.conf /etc/apache2/conf-enabled/
